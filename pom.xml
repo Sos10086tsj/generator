@@ -49,37 +49,45 @@
 		<ehcache-core.version>2.6.10</ehcache-core.version>
 		<ehcache.version>2.9.0</ehcache.version>
 		<commons-configuration.version>1.10</commons-configuration.version>
-		
+
 		<apache.velocity.version>1.7</apache.velocity.version>
 		<apache.velocity.tools.version>2.0</apache.velocity.tools.version>
 		<org.antlr.version>2.7.6</org.antlr.version>
+
+		<oracle.ojdbc14.version>10.2.0.4.0</oracle.ojdbc14.version>
 	</properties>
 
 	<dependencies>
-	
-	<!-- velocity -->
-			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity</artifactId>
-				<version>${apache.velocity.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity-tools</artifactId>
-				<version>${apache.velocity.tools.version}</version>
-				<exclusions>
-					<exclusion>  
-                    	<groupId>org.hibernate</groupId>  
-                    	<artifactId>antlr</artifactId>  
-                	</exclusion> 
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>antlr</groupId>
-				<artifactId>antlr</artifactId>
-				<version>${org.antlr.version}</version>
-			</dependency>
-	
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>${oracle.ojdbc14.version}</version>
+		</dependency>
+
+		<!-- velocity -->
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${apache.velocity.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity-tools</artifactId>
+			<version>${apache.velocity.tools.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>antlr</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>antlr</groupId>
+			<artifactId>antlr</artifactId>
+			<version>${org.antlr.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -382,28 +390,24 @@
 			<artifactId>druid</artifactId>
 			<version>${druid.version}</version>
 		</dependency>
-		
-		<!-- ehcache 
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>${ehcache-core.version}</version>
-		</dependency>-->
+
+		<!-- ehcache <dependency> <groupId>net.sf.ehcache</groupId> <artifactId>ehcache-core</artifactId> 
+			<version>${ehcache-core.version}</version> </dependency> -->
 		<!-- ehcache -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 			<version>${ehcache.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>${commons-configuration.version}</version>
 		</dependency>
-		
+
 	</dependencies>
-	
+
 	<!-- profile 配置 -->
 	<profiles>
 		<!-- dev配置 -->
@@ -469,7 +473,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			
+
 			<!-- war打包插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -484,7 +488,7 @@
 					</webResources>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 </project>
