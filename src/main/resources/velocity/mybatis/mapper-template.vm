@@ -1,9 +1,36 @@
-<html>
-    <body>
-        <h3>Hi ${userName}, welcome to iPorjectManagement!</h3>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${mapper.daoClass}">
 
-        <div>
-        	Please Verify your account through <a href="${validationUrl}">Validation Url</a>.
-        </div>
-    </body>
-</html>
+	<sql id="${mapper.columnsName}">
+		${mapper.columns}
+	</sql>
+	
+	<resultMap id="${mapper.resultMapName}" type="${mapper.modelClass}">
+		${mapper.resultMap}
+	</resultMap>
+
+	<insert id="insert" parameterType="${mapper.modelClass}">
+		INSERT INTO ${mapper.tableName}
+		(
+			<include refid="${mapper.columnsName}" />
+		)
+		values
+		(
+			${mapper.insertValues}
+		)
+	</insert>
+	
+	<update id="update" parameterType="${mapper.modelClass}">
+		UPDATE ${mapper.tableName} SET 
+			${mapper.updateValues}
+		WHERE ${mapper.pkCondition}
+	</update>
+	
+	<delete id="delete" parameterType="${mapper.modelClass}">
+		DELETE FROM ${mapper.tableName} WHERE ${mapper.pkCondition}
+	</delete>
+
+</mapper>
+
+

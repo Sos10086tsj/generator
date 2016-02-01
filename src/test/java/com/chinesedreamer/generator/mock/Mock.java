@@ -1,5 +1,6 @@
 package com.chinesedreamer.generator.mock;
 
+import com.chinesedreamer.generator.mybatis.db.config.CrudConfig;
 import com.chinesedreamer.generator.mybatis.db.config.DataSource;
 import com.chinesedreamer.generator.mybatis.db.config.Job;
 import com.chinesedreamer.generator.mybatis.db.constant.JobScope;
@@ -18,8 +19,15 @@ public class Mock {
 		Job job = new Job();
 		job.setTable("SYS_USER");
 		job.setScope(JobScope.CRUD);
-		job.setJavaSourcePath("C:\\Users\\Paris\\Desktop\\test\\");
-		job.setXmlSourcePath("C:\\Users\\Paris\\Desktop\\test\\");
+		job.setCrudConfig(Mock.mockCrudConfig());
 		return job;
+	}
+	
+	public static CrudConfig mockCrudConfig() {
+		CrudConfig crudConfig = new CrudConfig();
+		crudConfig.setDaoPath("C:\\Users\\Paris\\Desktop\\test\\");
+		crudConfig.setMapperPath("C:\\Users\\Paris\\Desktop\\test\\");
+		crudConfig.setModelPath("C:\\Users\\Paris\\Desktop\\test\\");
+		return crudConfig;
 	}
 }
