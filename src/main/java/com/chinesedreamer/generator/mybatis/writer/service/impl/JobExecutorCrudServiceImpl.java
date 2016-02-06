@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 			
 			String modelName = FormatHelper.getModelName(job.getTable());
 			//1. 生成mapper
-			FileUtil.write2File(this.myBatisTemplateService.getMapperTemplate(this.generateMapper(job, pks, columns)), 
+			FileUtil.write2File(this.myBatisTemplateService.getMapperTemplate(this.generateMapper(job, modelName, pks, columns)), 
 					job.getCrudConfig().getMapperPath() + modelName + "Dao.xml", 
 					EncodingConstant.ENCODE_UTF_8);
 			//2. 生成dao
@@ -60,7 +61,22 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 	 * @param columns
 	 * @return
 	 */
-	private Mapper generateMapper(Job job, List<TableColumn> pks, List<TableColumn> columns) {
-		return null;
+	private Mapper generateMapper(Job job, String modelName, List<TableColumn> pks, List<TableColumn> columns) {
+		Mapper mapper = new Mapper();
+		//dao类
+		mapper.setDaoClass(FormatHelper.getDaoClass(job.getCrudConfig().getDaoPath(), modelName));
+		//refId
+		mapper.setRefId(StringUtils.uncapitalize(modelName) + "Columns");
+		//columns
+		StringBuffer columnsBuffer = new StringBuffer();
+//		private String columns;
+//		private String resultMapName;
+//		private String modelClass;
+//		private String resultMap;
+//		private String tableName;
+//		private String insertValues;
+//		private String updateValues;
+//		private String pkCondition;
+		return mapper;
 	}
 }

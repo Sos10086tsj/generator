@@ -1,5 +1,7 @@
 package com.chinesedreamer.generator.mybatis.db;
 
+import java.io.File;
+
 import org.apache.commons.lang.StringUtils;
 
 public class FormatHelper {
@@ -22,5 +24,24 @@ public class FormatHelper {
 			}
 		}
 		return buffer.toString();
+	}
+	
+	/**
+	 * 获取pacakge路径
+	 * @param path
+	 * @return
+	 */
+	public static String formatPackageName(String path) {
+		return path.replace(File.separator, ".");
+	}
+	
+	/**
+	 * 获取dao类
+	 * @param path
+	 * @param modelName
+	 * @return
+	 */
+	public static String getDaoClass(String path, String modelName) {
+		return formatPackageName(path) + modelName + "Dao";
 	}
 }
