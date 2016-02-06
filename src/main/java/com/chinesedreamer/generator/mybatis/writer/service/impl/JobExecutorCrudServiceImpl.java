@@ -2,19 +2,14 @@ package com.chinesedreamer.generator.mybatis.writer.service.impl;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.chinesedreamer.generator.common.constant.EncodingConstant;
 import com.chinesedreamer.generator.mybatis.db.DatabaseMetaDataHelper;
@@ -26,6 +21,7 @@ import com.chinesedreamer.generator.mybatis.template.entity.Mapper;
 import com.chinesedreamer.generator.mybatis.template.service.MyBatisTemplateService;
 import com.chinesedreamer.generator.mybatis.writer.service.JobExecutorService;
 import com.chinesedreamer.generator.util.FileUtil;
+import com.chinesedreamer.generator.util.StringUtil;
 
 @Service("jobExecutorCrudService")
 public class JobExecutorCrudServiceImpl implements JobExecutorService{
@@ -64,19 +60,34 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 	private Mapper generateMapper(Job job, String modelName, List<TableColumn> pks, List<TableColumn> columns) {
 		Mapper mapper = new Mapper();
 		//dao类
-		mapper.setDaoClass(FormatHelper.getDaoClass(job.getCrudConfig().getDaoPath(), modelName));
+		mapper.setDaoClass(FormatHelper.formatPackageName(job.getCrudConfig().getDaoPath()) + modelName + "Dao");
 		//refId
-		mapper.setRefId(StringUtils.uncapitalize(modelName) + "Columns");
+		String uncapitalizeModelName = StringUtils.uncapitalize(modelName);
+		mapper.setRefId(uncapitalizeModelName + "Columns");
 		//columns
 		StringBuffer columnsBuffer = new StringBuffer();
-//		private String columns;
-//		private String resultMapName;
-//		private String modelClass;
-//		private String resultMap;
-//		private String tableName;
-//		private String insertValues;
-//		private String updateValues;
-//		private String pkCondition;
+		StringBuffer resultMapBuffer = new StringBuffer();
+		StringBuffer insertValuesBuffer = new StringBuffer();
+		StringBuffer updateValuesBuffer = new StringBuffer();
+		for (TableColumn tableColumn : columns) {
+			columnsBuffer.append(tableColumn).append(",");
+			resultMapBuffer.append(FormatHelper.getMapperResultMapRow(tableColumn));
+			insertValuesBuffer.append(FormatHelper.getMapperInsertRow(tableColumn));
+			updateValuesBuffer.append(FormatHelper.getMapperUpdateRow(tableColumn));
+		}
+		mapper.setColumns(StringUtil.removeLastCharacter(columnsBuffer.toString(), ","));
+		mapper.setResultMapName(uncapitalizeModelName + "ResultMap");
+		mapper.setModelClass(FormatHelper.formatPackageName(job.getCrudConfig().getModelPath()) + modelName);
+		//resultMap
+		mapper.setResultMap(resultMapBuffer.toString());
+		//tableName
+		mapper.setTableName(job.getTable());
+		//insertValues
+		mapper.setInsertValues(StringUtil.removeLastCharacter(insertValuesBuffer.toString(), ","));
+		//updateValues
+		mapper.setUpdateValues(updateValuesBuffer.toString());
+		//pkCondition
+		mapper.setPkCondition(FormatHelper.getMapperPkCondition(pks) );
 		return mapper;
 	}
 }

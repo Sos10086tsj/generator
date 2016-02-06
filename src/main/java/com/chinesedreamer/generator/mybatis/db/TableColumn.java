@@ -21,6 +21,5 @@ public class TableColumn {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	
+
 }
