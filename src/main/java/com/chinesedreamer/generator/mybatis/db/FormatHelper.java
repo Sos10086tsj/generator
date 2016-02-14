@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.chinesedreamer.generator.mybatis.db.constant.TypeMapper;
 import com.chinesedreamer.generator.mybatis.template.entity.ModelProperty;
 
 public class FormatHelper {
@@ -52,7 +53,7 @@ public class FormatHelper {
 		.append("\" property=\"")
 		.append(getHumpStr(column.getName(), "_"))
 		.append("\" jdbcType=\"")
-		.append(column.getType())
+		.append(column.getMapper().getJdbcType())
 		.append("\" />");
 		return buffer.toString();
 	}
@@ -66,7 +67,7 @@ public class FormatHelper {
 		StringBuffer buffer = new StringBuffer("#{");
 		buffer.append(getHumpStr(column.getName(), "_"))
 		.append(",jdbcType=")
-		.append(column.getType())
+		.append(column.getMapper().getJdbcType())
 		.append("},");
 		return buffer.toString();
 	}
@@ -85,7 +86,7 @@ public class FormatHelper {
 		.append(" = #{")
 		.append(propertyName)
 		.append(",jdbcType=")
-		.append(column.getType())
+		.append(column.getMapper().getJdbcType())
 		.append("},</if>");
 		return buffer.toString();
 	}
@@ -106,7 +107,7 @@ public class FormatHelper {
 			.append(" = #{")
 			.append(getHumpStr(column.getName(), "_"))
 			.append(",jdbcType=")
-			.append(column.getType())
+			.append(column.getMapper().getJdbcType())
 			.append("} ");
 		}
 		return buffer.toString();
@@ -151,13 +152,16 @@ public class FormatHelper {
 		String methodSuffix = StringUtils.capitalize(humpProperty);
 		modelProperty.setGetterName("get" + methodSuffix);
 		modelProperty.setSetterName("set" + methodSuffix);
-		if (column.getType().startsWith("DATE") || column.getType().startsWith("TIMESTAMP")) {//date
+		if (column.getMapper().equals(TypeMapper.DATE) || column.getMapper().equals(TypeMapper.TIMESTAMP)) {//date
 			modelProperty.setType("Date");
 			packages.add("java.util.Date");
-		}else if (column.getType().startsWith("INT")) {//int
+		}else if (column.getMapper().equals(TypeMapper.INT) || column.getMapper().equals(TypeMapper.INTEGER)) {//int
 			modelProperty.setType("Integer");
+		}else if (column.getMapper().equals(TypeMapper.NUMBER) || column.getMapper().equals(TypeMapper.NUMERIC)) {//int
+			modelProperty.setType("BigDecimal");
+			packages.add("java.math.BigDecimal");
 		}else {
-			modelProperty.setType("String");
+			modelProperty.setType(column.getMapper().getJavaType());
 		}
 		properties.add(modelProperty);
 	}
