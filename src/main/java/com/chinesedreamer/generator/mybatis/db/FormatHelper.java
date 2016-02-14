@@ -26,6 +26,8 @@ public class FormatHelper {
 				String word = words[i];
 				buffer.append(StringUtils.capitalize(word));
 			}
+		}else {
+			buffer.append(StringUtils.capitalize(tableName));
 		}
 		return buffer.toString();
 	}
