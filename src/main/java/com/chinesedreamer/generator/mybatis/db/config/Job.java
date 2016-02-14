@@ -4,6 +4,7 @@ import com.chinesedreamer.generator.mybatis.db.constant.JobScope;
 
 public class Job {
 	private String table;
+	private String modelPrefix;
 	private JobScope scope;
 	private CrudConfig crudConfig;
 	public String getTable() {
@@ -23,6 +24,12 @@ public class Job {
 	}
 	public void setCrudConfig(CrudConfig crudConfig) {
 		this.crudConfig = crudConfig;
+	}
+	public String getModelPrefix() {
+		return modelPrefix;
+	}
+	public void setModelPrefix(String modelPrefix) {
+		this.modelPrefix = modelPrefix;
 	}
 	
 	

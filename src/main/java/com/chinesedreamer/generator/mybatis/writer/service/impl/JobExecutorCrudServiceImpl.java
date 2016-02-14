@@ -54,6 +54,9 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 			}
 			
 			String modelName = FormatHelper.getModelName(job.getTable());
+			if (!StringUtils.isEmpty(job.getModelPrefix())) {
+				modelName = job.getModelPrefix() + modelName;
+			}
 			//1. 生成mapper
 			FileUtil.write2File(this.myBatisTemplateService.getMapperTemplate(this.generateMapper(job, modelName, pks, columns)), 
 					job.getCrudConfig().getMapperPath() + modelName + "Dao.xml", 
