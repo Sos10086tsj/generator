@@ -26,8 +26,11 @@ public class Mock {
 	public static CrudConfig mockCrudConfig() {
 		CrudConfig crudConfig = new CrudConfig();
 		crudConfig.setDaoPath("C:\\Users\\Paris\\Desktop\\test\\");
+		crudConfig.setDaoPath("com.chinesedreamer.dao");
 		crudConfig.setMapperPath("C:\\Users\\Paris\\Desktop\\test\\");
+		crudConfig.setMapperPackage("com.chinesedreamer.dao");
 		crudConfig.setModelPath("C:\\Users\\Paris\\Desktop\\test\\");
+		crudConfig.setModelPackage("com.chinesedreamer.model");
 		return crudConfig;
 	}
 }

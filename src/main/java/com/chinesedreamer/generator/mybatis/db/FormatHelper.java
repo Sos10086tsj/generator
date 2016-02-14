@@ -122,10 +122,10 @@ public class FormatHelper {
 			for (int i = 0; i < strWords.length; i++) {
 				String word = strWords[i];
 				if (i == 0) {
-					buffer.append(StringUtils.uncapitalize(word));
+					buffer.append(word.toLowerCase());
 				}else {
 					if (!StringUtils.isEmpty(word)) {
-						buffer.append(StringUtils.capitalize(word));
+						buffer.append(StringUtils.capitalize(word.toLowerCase()));
 					}
 				}
 			}

@@ -38,10 +38,8 @@ public class DatabaseMetaDataHelper {
 		List<TableColumn> pks = new ArrayList<TableColumn>();
 		ResultSet rs = metaData.getPrimaryKeys(null, schemaName, tableName);
 		while (rs.next()){
-			String pkName = rs.getString("PK_NAME");
-			//int dataType = rs.getInt("DATA_TYPE");
-			String dataTypeName = rs.getString("TYPE_NAME");
-			pks.add(new TableColumn(pkName, dataTypeName));
+			String pkName = rs.getString("COLUMN_NAME");
+			pks.add(new TableColumn(pkName, "VARCHAR"));
 		}
 		return pks;
 	}

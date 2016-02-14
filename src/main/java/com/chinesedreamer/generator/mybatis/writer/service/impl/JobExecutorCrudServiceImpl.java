@@ -38,6 +38,14 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 			List<TableColumn> columns = DatabaseMetaDataHelper.getTableColumns(metaData,
 					dataSource.getUsername().toUpperCase(), job.getTable().toUpperCase());
 			List<TableColumn> pks = DatabaseMetaDataHelper.getTablePrimaryKey(metaData, dataSource.getUsername().toUpperCase(), job.getTable().toUpperCase());
+			//根据columns获取pks列类型
+			for (TableColumn pk : pks) {
+				for (TableColumn column : columns) {
+					if (column.getName().equals(pk.getName())) {
+						pk.setType(column.getType());
+					}
+				}
+			}
 			
 			String modelName = FormatHelper.getModelName(job.getTable());
 			//1. 生成mapper
@@ -60,7 +68,7 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 	private Mapper generateMapper(Job job, String modelName, List<TableColumn> pks, List<TableColumn> columns) {
 		Mapper mapper = new Mapper();
 		//dao类
-		mapper.setDaoClass(FormatHelper.formatPackageName(job.getCrudConfig().getDaoPath()) + modelName + "Dao");
+		mapper.setDaoClass(job.getCrudConfig().getDaoPackage() + "." + modelName + "Dao");
 		//refId
 		String uncapitalizeModelName = StringUtils.uncapitalize(modelName);
 		mapper.setRefId(uncapitalizeModelName + "Columns");
@@ -70,14 +78,14 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 		StringBuffer insertValuesBuffer = new StringBuffer();
 		StringBuffer updateValuesBuffer = new StringBuffer();
 		for (TableColumn tableColumn : columns) {
-			columnsBuffer.append(tableColumn).append(",");
+			columnsBuffer.append(tableColumn.getName()).append(",");
 			resultMapBuffer.append(FormatHelper.getMapperResultMapRow(tableColumn));
 			insertValuesBuffer.append(FormatHelper.getMapperInsertRow(tableColumn));
 			updateValuesBuffer.append(FormatHelper.getMapperUpdateRow(tableColumn));
 		}
 		mapper.setColumns(StringUtil.removeLastCharacter(columnsBuffer.toString(), ","));
 		mapper.setResultMapName(uncapitalizeModelName + "ResultMap");
-		mapper.setModelClass(FormatHelper.formatPackageName(job.getCrudConfig().getModelPath()) + modelName);
+		mapper.setModelClass(job.getCrudConfig().getModelPackage() + "." + modelName);
 		//resultMap
 		mapper.setResultMap(resultMapBuffer.toString());
 		//tableName
