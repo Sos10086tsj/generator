@@ -1,9 +1,17 @@
-<html>
-    <body>
-        <h3>Hi ${userName}, welcome to iPorjectManagement!</h3>
+package ${model.modelPackage};
 
-        <div>
-        	Please Verify your account through <a href="${validationUrl}">Validation Url</a>.
-        </div>
-    </body>
-</html>
+#foreach ($package in $model.packages)
+import $package;
+#end
+
+public class ${model.modelName}{
+	#foreach ($property in $model.properties)
+		private $property.type $property.property;
+		public String ${property.getterName}(){
+			return $property.property;
+		}
+		public void ${property.setterName}(String $property.property) {
+			this.$property.property = $property.property;
+		}
+	#end
+}

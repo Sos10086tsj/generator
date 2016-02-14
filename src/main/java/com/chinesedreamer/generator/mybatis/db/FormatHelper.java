@@ -2,8 +2,11 @@ package com.chinesedreamer.generator.mybatis.db;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.chinesedreamer.generator.mybatis.template.entity.ModelProperty;
 
 public class FormatHelper {
 	
@@ -131,5 +134,29 @@ public class FormatHelper {
 			}
 			return buffer.toString();
 		}
+	}
+	
+	/**
+	 * 逐行增加model属性
+	 * @param column
+	 * @param packages
+	 * @param properties
+	 */
+	public static void addProperty(TableColumn column,Set<String> packages,List<ModelProperty> properties) {
+		String humpProperty = getHumpStr(column.getName(), "_");
+		ModelProperty modelProperty = new ModelProperty();
+		modelProperty.setProperty(humpProperty);
+		String methodSuffix = StringUtils.capitalize(humpProperty);
+		modelProperty.setGetterName("get" + methodSuffix);
+		modelProperty.setSetterName("set" + methodSuffix);
+		if (column.getType().startsWith("DATE") || column.getType().startsWith("TIMESTAMP")) {//date
+			modelProperty.setType("Date");
+			packages.add("java.util.Date");
+		}else if (column.getType().startsWith("INT")) {//int
+			modelProperty.setType("Integer");
+		}else {
+			modelProperty.setType("String");
+		}
+		properties.add(modelProperty);
 	}
 }

@@ -2,7 +2,10 @@ package com.chinesedreamer.generator.mybatis.writer.service.impl;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -20,6 +23,7 @@ import com.chinesedreamer.generator.mybatis.db.config.Job;
 import com.chinesedreamer.generator.mybatis.template.entity.Dao;
 import com.chinesedreamer.generator.mybatis.template.entity.Mapper;
 import com.chinesedreamer.generator.mybatis.template.entity.Model;
+import com.chinesedreamer.generator.mybatis.template.entity.ModelProperty;
 import com.chinesedreamer.generator.mybatis.template.service.MyBatisTemplateService;
 import com.chinesedreamer.generator.mybatis.writer.service.JobExecutorService;
 import com.chinesedreamer.generator.util.FileUtil;
@@ -134,6 +138,15 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 	 */
 	private Model generateModel(Job job, String modelName, List<TableColumn> pks, List<TableColumn> columns) {
 		Model model = new Model();
+		model.setModelName(modelName);
+		model.setModelPackage(job.getCrudConfig().getModelPackage());
+		Set<String> packages = new HashSet<String>();
+		List<ModelProperty> properties = new ArrayList<ModelProperty>();
+		for (TableColumn column : columns) {
+			FormatHelper.addProperty(column, packages, properties);
+		}
+		model.setPackages(packages);
+		model.setProperties(properties);
 		return model;
 	}
 }
