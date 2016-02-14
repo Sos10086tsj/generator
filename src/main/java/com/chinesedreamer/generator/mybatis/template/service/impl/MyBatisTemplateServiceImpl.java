@@ -32,14 +32,22 @@ public class MyBatisTemplateServiceImpl implements MyBatisTemplateService{
 
 	@Override
 	public String getDaoTemplate(Dao dao) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("dao", dao);
+		return VelocityEngineUtils.mergeTemplateIntoString(
+				this.ve, 
+				"velocity/mybatis/dao-template.vm", 
+				EncodingConstant.ENCODE_UTF_8, model);
 	}
 
 	@Override
 	public String getModelTemplate(Model model) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> vmModel = new HashMap<String, Object>();
+		vmModel.put("model", model);
+		return VelocityEngineUtils.mergeTemplateIntoString(
+				this.ve, 
+				"velocity/mybatis/model-template.vm", 
+				EncodingConstant.ENCODE_UTF_8, vmModel);
 	}
 
 }

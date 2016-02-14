@@ -1,9 +1,11 @@
-<html>
-    <body>
-        <h3>Hi ${userName}, welcome to iPorjectManagement!</h3>
+package ${dao.daoPackage};
 
-        <div>
-        	Please Verify your account through <a href="${validationUrl}">Validation Url</a>.
-        </div>
-    </body>
-</html>
+import ${dao.modelPackage};
+
+public interface ${dao.daoName} {
+	public int insert(${dao.modelName} model);
+	
+	public int update(${dao.modelName} model);
+	
+	public int delete(${dao.modelName} model);
+}

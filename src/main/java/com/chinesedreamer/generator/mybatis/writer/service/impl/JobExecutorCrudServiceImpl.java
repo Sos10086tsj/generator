@@ -17,7 +17,9 @@ import com.chinesedreamer.generator.mybatis.db.FormatHelper;
 import com.chinesedreamer.generator.mybatis.db.TableColumn;
 import com.chinesedreamer.generator.mybatis.db.config.DataSource;
 import com.chinesedreamer.generator.mybatis.db.config.Job;
+import com.chinesedreamer.generator.mybatis.template.entity.Dao;
 import com.chinesedreamer.generator.mybatis.template.entity.Mapper;
+import com.chinesedreamer.generator.mybatis.template.entity.Model;
 import com.chinesedreamer.generator.mybatis.template.service.MyBatisTemplateService;
 import com.chinesedreamer.generator.mybatis.writer.service.JobExecutorService;
 import com.chinesedreamer.generator.util.FileUtil;
@@ -53,7 +55,13 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 					job.getCrudConfig().getMapperPath() + modelName + "Dao.xml", 
 					EncodingConstant.ENCODE_UTF_8);
 			//2. 生成dao
+			FileUtil.write2File(this.myBatisTemplateService.getDaoTemplate(this.generateDao(job, modelName, pks, columns)), 
+					job.getCrudConfig().getDaoPath() + modelName + "Dao.java", 
+					EncodingConstant.ENCODE_UTF_8);
 			//3. 生成model
+			FileUtil.write2File(this.myBatisTemplateService.getModelTemplate(this.generateModel(job, modelName, pks, columns)), 
+					job.getCrudConfig().getModelPath() + modelName + ".java", 
+					EncodingConstant.ENCODE_UTF_8);
 		} catch (Exception e) {
 			this.logger.error("{}",e);
 		}
@@ -97,5 +105,35 @@ public class JobExecutorCrudServiceImpl implements JobExecutorService{
 		//pkCondition
 		mapper.setPkCondition(FormatHelper.getMapperPkCondition(pks) );
 		return mapper;
+	}
+	
+	/**
+	 * 生成dao配置
+	 * @param job
+	 * @param modelName
+	 * @param pks
+	 * @param columns
+	 * @return
+	 */
+	private Dao generateDao(Job job, String modelName, List<TableColumn> pks, List<TableColumn> columns) {
+		Dao dao = new Dao();
+		dao.setDaoName(modelName + "Dao");
+		dao.setDaoPackage(job.getCrudConfig().getDaoPackage());
+		dao.setModelName(modelName);
+		dao.setModelPackage(job.getCrudConfig().getModelPackage() + "." + modelName);
+		return dao;
+	}
+	
+	/**
+	 * 生成model配置
+	 * @param job
+	 * @param modelName
+	 * @param pks
+	 * @param columns
+	 * @return
+	 */
+	private Model generateModel(Job job, String modelName, List<TableColumn> pks, List<TableColumn> columns) {
+		Model model = new Model();
+		return model;
 	}
 }
