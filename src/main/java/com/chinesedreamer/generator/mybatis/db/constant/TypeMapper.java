@@ -3,8 +3,8 @@ package com.chinesedreamer.generator.mybatis.db.constant;
 public enum TypeMapper {
 	DEFAULT("JDBC","JAVA"),
 	CHAR("CHAR","String"),
-	VARCHAR("VARCHAR","JAVA"),
-	VARCHAR2("VARCHAR","JAVA"),
+	VARCHAR("VARCHAR","String"),
+	VARCHAR2("VARCHAR","String"),
 	NUMBER("NUMERIC","BigDecimal"),
 	NUMERIC("NUMERIC","BigDecimal"),
 	DECIMAL("DECIMAL","BigDecimal"),
@@ -32,7 +32,11 @@ public enum TypeMapper {
 	
 	public static TypeMapper GetType(String type) {
 		for (TypeMapper mapper : TypeMapper.values()) {
-			if (mapper.toString().equals(type)) {
+			int index = type.indexOf("(");
+			if (-1 != index) {
+				type = type.substring(0, index);
+			}
+			if (type.equals(mapper.toString())) {
 				return mapper;
 			}
 		}
