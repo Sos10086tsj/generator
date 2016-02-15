@@ -1,10 +1,11 @@
 package com.chinesedreamer.generator.mybatis.db.constant;
 
 public enum TypeMapper {
-	DEFAULT("JDBC","JAVA"),
+	DEFAULT("VARCHAR","String"),
 	CHAR("CHAR","String"),
 	VARCHAR("VARCHAR","String"),
 	VARCHAR2("VARCHAR","String"),
+	NVARCHAR2("VARCHAR","String"),
 	NUMBER("NUMERIC","BigDecimal"),
 	NUMERIC("NUMERIC","BigDecimal"),
 	DECIMAL("DECIMAL","BigDecimal"),
